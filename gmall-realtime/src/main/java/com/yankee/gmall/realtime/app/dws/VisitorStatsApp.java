@@ -179,6 +179,17 @@ public class VisitorStatsApp {
         // 打印测试
         result.print("result>>>>>");
 
+        // 不开窗打印
+        // keyedStream.reduce(new ReduceFunction<VisitorStats>() {
+        //     @Override
+        //     public VisitorStats reduce(VisitorStats value1, VisitorStats value2) throws Exception {
+        //         return new VisitorStats("", "", value1.getVc(), value1.getCh(), value1.getAr(), value1.getIs_new(),
+        //                 value1.getUv_ct() + value2.getUv_ct(), value1.getPv_ct() + value2.getPv_ct(),
+        //                 value1.getSv_ct() + value2.getSv_ct(), value1.getUj_ct() + value2.getUj_ct(),
+        //                 value1.getDur_sum() + value2.getDur_sum(), System.currentTimeMillis());
+        //     }
+        // }).print(">>>>>>>>>>");
+
         // 6.将聚合之后的数据写入ClickHouse
 
         // 7.执行任务
