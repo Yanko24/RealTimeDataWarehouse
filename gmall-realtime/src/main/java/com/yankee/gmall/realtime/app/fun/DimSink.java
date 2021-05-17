@@ -73,10 +73,11 @@ public class DimSink extends RichSinkFunction<JSONObject> {
 
     /**
      * 创建upsertSQl
+     *
      * @param tableName 表名
-     * @param keys 表字段
-     * @param values 表字段对应的值
-     * @return 更鑫表语句
+     * @param keys      表字段
+     * @param values    表字段对应的值
+     * @return 更新表语句
      */
     private String getUpsertSQL(String tableName, Set<String> keys, Collection<Object> values) {
         return "upsert into " + GmallConfig.HBASE_SCHEMA + "." + tableName +

@@ -9,4 +9,10 @@ public class GmallConfig {
 
     // Phoenix连接参数
     public static final String PHOENIX_SERVER = "jdbc:phoenix:hadoop01,hadoop02,hadoop03:2181/hbase";
+
+    // ClickHouse的驱动
+    public static final String CLICKHouse_DRIVER = "ru.yandex.clickhouse.ClickHouseDriver";
+
+    // ClickHouse的URL
+    public static final String CLICKHOUSE_URL = "jdbc:clickhosue://hadoop01:8123/default";
 }

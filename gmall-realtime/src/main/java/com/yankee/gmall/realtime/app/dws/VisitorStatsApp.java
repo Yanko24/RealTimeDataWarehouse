@@ -3,6 +3,7 @@ package com.yankee.gmall.realtime.app.dws;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.yankee.gmall.realtime.bean.VisitorStats;
+import com.yankee.gmall.realtime.utils.ClickHouseUtil;
 import com.yankee.gmall.realtime.utils.DateTimeUtil;
 import com.yankee.gmall.realtime.utils.MyKafkaUtil;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
@@ -191,6 +192,7 @@ public class VisitorStatsApp {
         // }).print(">>>>>>>>>>");
 
         // 6.将聚合之后的数据写入ClickHouse
+        result.addSink(ClickHouseUtil.getSink("insert into visitor_stats values(?,?,?,?,?,?,?,?,?,?,?,?)"));
 
         // 7.执行任务
         env.execute();
