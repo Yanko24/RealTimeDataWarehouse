@@ -47,7 +47,7 @@ public class VisitorStatsApp {
         // 设置并行度
         env.setParallelism(1);
         // 设置状态后端
-        env.setStateBackend(new FsStateBackend("hdfs://supercluster/gmall/flink/dws_log/checkpoint"));
+        env.setStateBackend(new FsStateBackend("hdfs://supercluster/gmall/flink/dws_visitor/checkpoint"));
         // 设置开启checkpoint
         env.enableCheckpointing(10000L, CheckpointingMode.EXACTLY_ONCE);
         env.getCheckpointConfig().setCheckpointTimeout(60000L);
@@ -56,11 +56,11 @@ public class VisitorStatsApp {
 
         // 2.读取kafka主题的数据
         DataStreamSource<String> pageLogDS = env.addSource(MyKafkaUtil.getKafkaSource(DWD_PAGE_LOG_TOPIC,
-                "dws_log"));
+                "dws_visitor"));
         DataStreamSource<String> uniqueVisitDS = env.addSource(MyKafkaUtil.getKafkaSource(DWM_UNIQUE_VISIT,
-                "dws_log"));
+                "dws_visitor"));
         DataStreamSource<String> userJumpDetailDS = env.addSource(MyKafkaUtil.getKafkaSource(DWM_USER_JUMP_DETAIL,
-                "dws_log"));
+                "dws_visitor"));
 
         // 测试打印
         // pageLogDS.print("Page>>>>>");
