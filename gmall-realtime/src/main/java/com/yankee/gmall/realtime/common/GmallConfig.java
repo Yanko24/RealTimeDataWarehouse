@@ -14,5 +14,5 @@ public class GmallConfig {
     public static final String CLICKHouse_DRIVER = "ru.yandex.clickhouse.ClickHouseDriver";
 
     // ClickHouse的URL
-    public static final String CLICKHOUSE_URL = "jdbc:clickhosue://hadoop01:8123/default";
+    public static final String CLICKHOUSE_URL = "jdbc:clickhouse://hadoop01:8123/default";
 }
