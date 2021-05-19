@@ -69,6 +69,13 @@ public class PaymentWide {
     }
 
     private void mergeOrderWide(OrderWide orderWide) {
-
+        if (orderWide != null) {
+            try {
+                BeanUtils.copyProperties(this, orderWide);
+                order_create_time = orderWide.create_time;
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
