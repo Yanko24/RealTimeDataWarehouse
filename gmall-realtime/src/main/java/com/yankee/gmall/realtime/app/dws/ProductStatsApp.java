@@ -32,7 +32,6 @@ import org.apache.flink.util.Collector;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
@@ -187,7 +186,12 @@ public class ProductStatsApp {
         SingleOutputStreamOperator<ProductStats> paymentDS = paymentWideDS.map(json -> {
             PaymentWide paymentWide = JSON.parseObject(json, PaymentWide.class);
             Long ts = DateTimeUtil.toTs(paymentWide.getPayment_create_time());
-            return ProductStats.builder().sku_id(paymentWide.getSku_id()).payment_amount(paymentWide.getSplit_total_amount()).paidOrderIdSet(new HashSet<>(Collections.singleton(paymentWide.getOrder_id()))).ts(ts).build();
+            return ProductStats.builder()
+                    .sku_id(paymentWide.getSku_id())
+                    .payment_amount(paymentWide.getSplit_total_amount())
+                    .paidOrderIdSet(new HashSet<>(Collections.singleton(paymentWide.getOrder_id())))
+                    .ts(ts)
+                    .build();
         });
 
         // 打印测试
@@ -197,7 +201,12 @@ public class ProductStatsApp {
         SingleOutputStreamOperator<ProductStats> refundDS = refundInfoDS.map(json -> {
             JSONObject jsonObject = JSON.parseObject(json);
             Long ts = DateTimeUtil.toTs(jsonObject.getString("create_time"));
-            return ProductStats.builder().sku_id(jsonObject.getLong("sku_id")).refund_amount(jsonObject.getBigDecimal("refund_amount")).refundOrderIdSet(new HashSet<>(Collections.singleton(jsonObject.getLong("order_id")))).ts(ts).build();
+            return ProductStats.builder()
+                    .sku_id(jsonObject.getLong("sku_id"))
+                    .refund_amount(jsonObject.getBigDecimal("refund_amount"))
+                    .refundOrderIdSet(new HashSet<>(Collections.singleton(jsonObject.getLong("order_id"))))
+                    .ts(ts)
+                    .build();
         });
 
         // 打印测试
@@ -231,7 +240,8 @@ public class ProductStatsApp {
         // unionDS.print("unionDS>>>>>>");
 
         // 5.提取时间戳生成watermark
-        SingleOutputStreamOperator<ProductStats> productStatsWithWatermarkDS = unionDS.assignTimestampsAndWatermarks(WatermarkStrategy.<ProductStats>forBoundedOutOfOrderness(Duration.ofSeconds(2L)).withTimestampAssigner(new SerializableTimestampAssigner<ProductStats>() {
+        SingleOutputStreamOperator<ProductStats> productStatsWithWatermarkDS =
+                unionDS.assignTimestampsAndWatermarks(WatermarkStrategy.<ProductStats>forMonotonousTimestamps().withTimestampAssigner(new SerializableTimestampAssigner<ProductStats>() {
             @Override
             public long extractTimestamp(ProductStats element, long recordTimestamp) {
                 return element.getTs();
@@ -362,7 +372,8 @@ public class ProductStatsApp {
         productStatsWithTmDS.print(">>>>>>>");
 
         // 8.写入clickhouse
-        productStatsWithTmDS.addSink(ClickHouseUtil.getSink("insert into tableName values()"));
+        productStatsWithTmDS.addSink(ClickHouseUtil.getSink("insert into product_stats values(?,?,?,?,?,?,?,?,?,?,?," +
+                "?,?,?,?,?,?,?,?,?,?,?,?,?,?)"));
 
         // 9.执行任务
         env.execute();

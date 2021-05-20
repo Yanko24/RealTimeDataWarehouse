@@ -97,7 +97,7 @@ public class PaymentWideApp {
         // 5.双流join
         SingleOutputStreamOperator<PaymentWide> paymentWideDS = paymentInfoWithOrderIDKeyedStream
                 .intervalJoin(orderWideWithOrderIDKeyedStream)
-                .between(Time.minutes(-15), Time.seconds(5))
+                .between(Time.seconds(-1800), Time.seconds(0))
                 .process(new ProcessJoinFunction<PaymentInfo, OrderWide, PaymentWide>() {
                     @Override
                     public void processElement(PaymentInfo paymentInfo, OrderWide orderWide, Context context,
