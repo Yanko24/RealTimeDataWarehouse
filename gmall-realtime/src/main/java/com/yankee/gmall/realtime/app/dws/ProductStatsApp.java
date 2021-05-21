@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author Yankee
  * @program IntelliJ IDEA
- * @description 商品主题宽表加工
+ * @description 商品主题宽表
  * @date 2021/5/17 17:14
  *
  * 数据流：mockLog -> Nginx -> Logger -> Kafka(ods_base_log) -> FlinkApp(LogBaseApp) -> Kafka(dwd_page_log)

@@ -25,7 +25,8 @@ public class MyKafkaUtil {
 
     /**
      * 获取KafkaSource的方法
-     * @param topic 主题
+     *
+     * @param topic   主题
      * @param groupId 消费者组
      * @return FlinkKafkaConsumer
      */
@@ -39,6 +40,7 @@ public class MyKafkaUtil {
 
     /**
      * 获取KafkaSink的方法
+     *
      * @param topic 主题
      * @return
      */
@@ -48,8 +50,9 @@ public class MyKafkaUtil {
 
     /**
      * 获取KafkaSink的方法
+     *
      * @param kafkaSerializationSchema kafka的Schema
-     * @param <T> 泛型类型
+     * @param <T>                      泛型类型
      * @return
      */
     public static <T> FlinkKafkaProducer<T> getKafkaSinkBySchema(KafkaSerializationSchema<T> kafkaSerializationSchema) {
@@ -57,5 +60,22 @@ public class MyKafkaUtil {
         properties.setProperty(ProducerConfig.TRANSACTION_TIMEOUT_CONFIG, "300000");
         return new FlinkKafkaProducer<T>(DEFAULT_TOPIC, kafkaSerializationSchema, properties,
                 FlinkKafkaProducer.Semantic.EXACTLY_ONCE);
+    }
+
+    /**
+     * 获取kafkaDDL语句
+     *
+     * @param topic   主题
+     * @param groupId 消费者组
+     * @return kafkaDDL
+     */
+    public static String getKafkaDDL(String topic, String groupId) {
+        return "'connector' = 'kafka'," +
+                "'topic' = '" + topic + "'," +
+                "'properties.bootstrap.servers' = '" + KAFKA_SERVER + "'," +
+                "'properties.group.id' = '" + groupId + "'," +
+                "'scan.startup.mode' = 'latest-offset'," +
+                "'format' = 'json'" +
+                ")";
     }
 }
