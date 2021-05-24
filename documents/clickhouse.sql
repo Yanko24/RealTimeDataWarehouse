@@ -62,3 +62,15 @@ create table province_stats(
 ) engine = ReplacingMergeTree(ts)
 partition by toYYYYMMDD(stt)
 order by (stt,edt,province_id);
+
+-- 关键词主题宽表
+create table key_word_stats(
+                               stt DateTime,
+                               edt DateTime,
+                               source String,
+                               word String,
+                               word_count UInt64,
+                               ts UInt64
+) engine = ReplacingMergeTree(ts)
+partition by toYYYYMMDD(stt)
+order by (stt,edt,word);
