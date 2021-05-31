@@ -301,7 +301,7 @@ public class ProductStatsApp {
                 });
 
         // 打印测试
-        // reduceDS.print("reduceDS>>>>>");
+        reduceDS.print("reduceDS>>>>>");
 
         // 7.关联维度信息
         // 7.1 关联SKU信息
