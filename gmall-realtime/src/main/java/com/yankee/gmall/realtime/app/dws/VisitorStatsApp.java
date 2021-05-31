@@ -143,7 +143,7 @@ public class VisitorStatsApp {
 
         // 开窗
         WindowedStream<VisitorStats, Tuple4<String, String, String, String>, TimeWindow> windowedStream =
-                keyedStream.window(TumblingEventTimeWindows.of(Time.seconds(10)));
+                keyedStream.window(TumblingEventTimeWindows.of(Time.seconds(2)));
 
         // 聚合操作
         SingleOutputStreamOperator<VisitorStats> result = windowedStream.reduce(new ReduceFunction<VisitorStats>() {

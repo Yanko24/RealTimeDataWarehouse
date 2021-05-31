@@ -32,6 +32,7 @@ import org.apache.flink.util.Collector;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
@@ -241,7 +242,7 @@ public class ProductStatsApp {
 
         // 5.提取时间戳生成watermark
         SingleOutputStreamOperator<ProductStats> productStatsWithWatermarkDS =
-                unionDS.assignTimestampsAndWatermarks(WatermarkStrategy.<ProductStats>forMonotonousTimestamps().withTimestampAssigner(new SerializableTimestampAssigner<ProductStats>() {
+                unionDS.assignTimestampsAndWatermarks(WatermarkStrategy.<ProductStats>forBoundedOutOfOrderness(Duration.ofSeconds(10L)).withTimestampAssigner(new SerializableTimestampAssigner<ProductStats>() {
             @Override
             public long extractTimestamp(ProductStats element, long recordTimestamp) {
                 return element.getTs();
@@ -253,7 +254,7 @@ public class ProductStatsApp {
 
         // 6.分组，开窗，聚合
         SingleOutputStreamOperator<ProductStats> reduceDS = productStatsWithWatermarkDS.keyBy(ProductStats::getSku_id)
-                .window(TumblingEventTimeWindows.of(Time.seconds(10)))
+                .window(TumblingEventTimeWindows.of(Time.seconds(2)))
                 .reduce(new ReduceFunction<ProductStats>() {
                     @Override
                     public ProductStats reduce(ProductStats value1, ProductStats value2) throws Exception {

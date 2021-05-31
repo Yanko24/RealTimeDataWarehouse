@@ -77,14 +77,14 @@ public class KeyWordStatsApp {
         // 1.5 分组、开窗、聚合
         tableEnv.createTemporaryView("wordTable", wordTable);
         Table reduceTable = tableEnv.sqlQuery("SELECT " +
-                "DATE_FORMAT(TUMBLE_START(rowtime, INTERVAL '10' SECOND), 'yyyy-MM-dd HH:mm:ss') AS stt, " +
-                "DATE_FORMAT(TUMBLE_END(rowtime, INTERVAL '10' SECOND), 'yyyy-MM-dd HH:mm:ss') AS edt, " +
+                "DATE_FORMAT(TUMBLE_START(rowtime, INTERVAL '2' SECOND), 'yyyy-MM-dd HH:mm:ss') AS stt, " +
+                "DATE_FORMAT(TUMBLE_END(rowtime, INTERVAL '2' SECOND), 'yyyy-MM-dd HH:mm:ss') AS edt, " +
                 "'" + GmallConstant.KEYWORD_SEARCH + "' AS source, " +
                 "word, " +
                 "count(*) word_count, " +
                 "UNIX_TIMESTAMP() * 1000 AS ts " +
                 "FROM wordTable " +
-                "GROUP BY word, TUMBLE(rowtime, INTERVAL '10' SECOND)");
+                "GROUP BY word, TUMBLE(rowtime, INTERVAL '2' SECOND)");
 
         // 转换成流
         DataStream<KeyWordStats> rowDataStream = tableEnv.toAppendStream(reduceTable, KeyWordStats.class);
