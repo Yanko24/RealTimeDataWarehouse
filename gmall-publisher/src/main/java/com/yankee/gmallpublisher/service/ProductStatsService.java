@@ -1,6 +1,7 @@
 package com.yankee.gmallpublisher.service;
 
 import com.yankee.gmallpublisher.bean.ProductStats;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  * @description 商品统计Service
  * @date 2021/5/24 14:03
  */
+@Service
 public interface ProductStatsService {
     // 读取某一天的总交易额
     public BigDecimal getGMV(int date);

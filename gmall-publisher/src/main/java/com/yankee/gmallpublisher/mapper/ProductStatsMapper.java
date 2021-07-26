@@ -1,6 +1,7 @@
 package com.yankee.gmallpublisher.mapper;
 
 import com.yankee.gmallpublisher.bean.ProductStats;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @description 商品统计Mapper
  * @date 2021/5/24 13:58
  */
+@Mapper
 public interface ProductStatsMapper {
     // 查询GMV总数
     @Select("select sum(order_amount) order_amount from product_stats where toYYYYMMDD(stt) = #{date}")
